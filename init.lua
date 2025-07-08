@@ -93,29 +93,31 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = true
 
-
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-if vim.fn.executable('pwsh') == 1 then
+if vim.fn.has 'win64' == 1 or vim.fn.has 'win32' == 1 then
+  if vim.fn.executable 'pwsh' == 1 then
     vim.o.shell = 'pwsh'
-else
+  else
     vim.o.shell = 'powershell'
+  end
+
+  -- Setting shell command flags
+  vim.o.shellcmdflag =
+    "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues['Out-File:Encoding']='utf8';"
+
+  -- Setting shell redirection
+  vim.o.shellredir = '2>&1 | %{ "$_" } | Out-File %s; exit $LastExitCode'
+
+  -- Setting shell pipe
+  vim.o.shellpipe = '2>&1 | %{ "$_" } | Tee-Object %s; exit $LastExitCode'
+
+  -- Setting shell quote options
+  vim.o.shellquote = ''
+  vim.o.shellxquote = ''
 end
-
--- Setting shell command flags
-vim.o.shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[\'Out-File:Encoding\']=\'utf8\';'
-
--- Setting shell redirection
-vim.o.shellredir = '2>&1 | %{ "$_" } | Out-File %s; exit $LastExitCode'
-
--- Setting shell pipe
-vim.o.shellpipe = '2>&1 | %{ "$_" } | Tee-Object %s; exit $LastExitCode'
-
--- Setting shell quote options
-vim.o.shellquote = ''
-vim.o.shellxquote = ''
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -255,8 +257,6 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'barafael/neomake-platformio',
-  
-  
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -283,9 +283,10 @@ require('lazy').setup({
     },
   },
   {
-  'nvim-tree/nvim-tree.lua', version = '*', config= function()
-      require("nvim-tree").setup()
-
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    config = function()
+      require('nvim-tree').setup()
     end,
   },
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
