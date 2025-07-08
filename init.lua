@@ -958,8 +958,20 @@ require('lazy').setup({
   },
   {
     "tpope/vim-fugitive"
-  }
-
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    dependencies = {
+      'hrsh7th/nvim-cmp',
+      'github/copilot.vim',
+    },
+    sources = {
+      { name = 'copilot', group_index = 2 },
+      { name = 'nvim_lsp', group_index = 2 },
+      { name = 'path', group_index = 2 },
+      { name = 'luasnip', group_index = 2 }
+    }
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
