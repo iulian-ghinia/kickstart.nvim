@@ -15,4 +15,5 @@ require 'telescope-config'
 require 'toggleterm-config'
 require 'treesitter-config'
 require 'whichkey'
+require 'copilotchat'
 return {}

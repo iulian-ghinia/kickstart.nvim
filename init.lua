@@ -207,6 +207,9 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 vim.keymap.set('n', '<leader>tn', '<cmd>ToggleTerm direction=horizontal<CR>')
 vim.keymap.set('n', '<leader>tf', '<cmd>ToggleTerm direction=float<CR>')
+vim.keymap.set('n', '<leader>o', '<cmd>:bd<CR>', { desc = 'Close the current buffer' })
+vim.keymap.set('n', '<leader>y','<cmd>:bNext<CR>', { desc = 'Go to the next buffer' })
+vim.keymap.set('n', '<leader>h','<cmd>:bprevious<CR>', { desc = 'Go to the previous buffer' })
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -229,6 +232,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    require("nvim-tree.api").tree.open()
+  end
+})
+
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -972,6 +982,27 @@ require('lazy').setup({
       { name = 'path', group_index = 2 },
       { name = 'luasnip', group_index = 2 }
     }
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "hrsh7th/nvim-cmp",
+      "github/copilot.vim",
+    },
+    keys = {
+      { '<leader>zc', ":CopilotChat<CR>", mode = 'n', desc = '[Z]ap [C]opilotChat' },
+      { '<leader>ze', ":CopilotChatExplain<CR>", mode = 'v', desc = '[Z]ap [E]xplain selection with CopilotChat' },
+      { '<leader>zr', ":CopilotChatReview<CR>", mode = 'v', desc = 'Review Code' },
+      { '<leader>zf', ":CopilotChatFix<CR>", mode = 'v', desc = 'Fix Code' },
+      { '<leader>zt', ":CopilotChatTests<CR>", mode = 'v', desc = 'Generate Tests' },
+      { '<leader>zo', ":CopilotChatOptimize", mode = 'v', desc = 'Optimize Code' },
+      { '<leader>zd', ":CopilotChatDocs<CR>", mode = 'v', desc = 'Generate Documentation' },
+      { '<leader>zz', ":CopilotChatToggle<CR>", mode = 'v', desc = 'Toggle CopilotChat' },
+      { '<leader>zp', ":CopilotChatPrompts<CR>", mode = 'v', desc = 'Prompt CopilotChat' },
+      { '<leader>zm', ":CopilotChatModels<CR>", mode = 'v', desc = 'Select model'}
+    },
   },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
